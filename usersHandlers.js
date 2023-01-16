@@ -12,7 +12,7 @@ const getUserById = (req, res) => {
     .query("select * from users where id= ?", [id])
     .then(([users]) => {
       if (users[0]) {
-        res.send(200).json(users[0]);
+        res.status(200).json(users[0]);
       } else {
         res.send(404).send("Not Found");
       }
@@ -39,8 +39,31 @@ const postUser = (req, res) => {
     });
 };
 
+const updateUser = (req, res) => {
+  const id = +req.params.id;
+  const { firstname, lastname, email, city, language } = req.body;
+
+  database
+    .query(
+      "update users set firstname = ?, lastname = ?, email = ?, city = ?, language = ? where id = ?",
+      [firstname, lastname, email, city, language, id]
+    )
+    .then(([result]) => {
+      if (result.affectedRows === 0) {
+        res.status(404).send("Not Found");
+      } else {
+        res.sendStatus(204);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error editing the user");
+    });
+};
+
 module.exports = {
   getUsers,
   getUserById,
   postUser,
+  updateUser,
 };
