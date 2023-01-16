@@ -12,7 +12,7 @@ const getUserById = (req, res) => {
     .query("select * from users where id= ?", [id])
     .then(([users]) => {
       if (users[0]) {
-        res.send(200).json(users[0]);
+        res.status(200).json(users[0]);
       } else {
         res.send(404).send("Not Found");
       }
