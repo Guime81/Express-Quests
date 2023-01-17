@@ -3,6 +3,7 @@ const express = require("express");
 
 const movieHandlers = require("./movieHandlers");
 const usersHandlers = require("./usersHandlers");
+const { validateMovie } = require("./validator.js");
 const { validateUser } = require("./validator.js");
 
 const app = express();
@@ -19,8 +20,8 @@ app.get("/", welcome);
 app.get("/api/movies", movieHandlers.getMovies);
 app.get("/api/movies/:id", movieHandlers.getMovieById);
 
-app.post("/api/movies", movieHandlers.postMovie);
-app.put("/api/movies/:id", movieHandlers.updateMovie);
+app.post("/api/movies", validateMovie, movieHandlers.postMovie);
+app.put("/api/movies/:id", validateMovie, movieHandlers.updateMovie);
 app.delete("/api/movies/:id", movieHandlers.deleteMovie);
 
 app.get("/api/users", usersHandlers.getUsers);

@@ -2,6 +2,35 @@ const Joi = require("joi");
 
 //npm install joi for install package
 
+const movieSchema = Joi.object({
+  title: Joi.string()
+    .pattern(/^[a-zA-ZàáâèéêëïôöûùçÀÂÈÉÊËÏÔÛÙÇ '-]+$/)
+    .max(255)
+    .required(),
+  director: Joi.string()
+    .pattern(/^[a-zA-ZàáâèéêëïôöûùçÀÂÈÉÊËÏÔÛÙÇ '-]+$/)
+    .max(255)
+    .required(),
+  year: Joi.number().max(4).required(),
+  color: Joi.number().max(1).required(),
+  duration: Joi.number().max(3).required(),
+});
+
+const validateMovie = (req, res, next) => {
+  const { title, director, year, color, duration } = req.body;
+
+  const { error } = movieSchema.validate(
+    { title, director, year, color, duration },
+    { abortEarly: false }
+  );
+
+  if (error) {
+    res.status(422).json({ validationErrors: error.details });
+  } else {
+    next();
+  }
+};
+
 const userSchema = Joi.object({
   firstname: Joi.string()
     .pattern(/^[a-zA-ZàáâèéêëïôöûùçÀÂÈÉÊËÏÔÛÙÇ '-]+$/)
@@ -38,5 +67,6 @@ const validateUser = (req, res, next) => {
 };
 
 module.exports = {
+  validateMovie,
   validateUser,
 };
