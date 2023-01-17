@@ -7,7 +7,7 @@ const getUsers = (req, res) => {
   });
 };
 */
-
+// Nouveau code permettant la recup de querystring dans l'url
 const getUsers = (req, res) => {
   const initialSql = "select * from users";
   const where = [];
@@ -53,12 +53,12 @@ const getUserById = (req, res) => {
       if (users[0]) {
         res.status(200).json(users[0]);
       } else {
-        res.send(404).send("Not Found");
+        res.status(404).send("Not Found");
       }
     })
     .catch((err) => {
       console.error(err);
-      res.send(500).send("Error retrieving data from database");
+      res.status(500).send("Error retrieving data from database");
     });
 };
 
